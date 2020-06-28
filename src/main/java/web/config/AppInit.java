@@ -4,7 +4,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 
 public class AppInit extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-    // Метод, указывающий на класс конфигурации
+    /* РњРµС‚РѕРґ, СѓРєР°Р·С‹РІР°СЋС‰РёР№ РЅР° РєР»Р°СЃСЃ РєРѕРЅС„РёРіСѓСЂР°С†РёРё*/
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class<?>[]{
@@ -12,7 +12,7 @@ public class AppInit extends AbstractAnnotationConfigDispatcherServletInitialize
         };
     }
 
-    // Добавление конфигурации, в которой инициализируем ViewResolver, для корректного отображения jsp.
+    /* Р”РѕР±Р°РІР»РµРЅРёРµ РєРѕРЅС„РёРіСѓСЂР°С†РёРё, РІ РєРѕС‚РѕСЂРѕР№ РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј ViewResolver, РґР»СЏ РєРѕСЂСЂРµРєС‚РЅРѕРіРѕ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ jsp.*/
     @Override
     protected Class<?>[] getServletConfigClasses() {
         return new Class<?>[]{
@@ -20,7 +20,7 @@ public class AppInit extends AbstractAnnotationConfigDispatcherServletInitialize
         };
     }
 
-    /* Данный метод указывает url, на котором будет базироваться приложение */
+    /* Р”Р°РЅРЅС‹Р№ РјРµС‚РѕРґ СѓРєР°Р·С‹РІР°РµС‚ url, РЅР° РєРѕС‚РѕСЂРѕРј Р±СѓРґРµС‚ Р±Р°Р·РёСЂРѕРІР°С‚СЊСЃСЏ РїСЂРёР»РѕР¶РµРЅРёРµ */
     @Override
     protected String[] getServletMappings() {
         return new String[]{"/"};
