@@ -1,10 +1,14 @@
 package web.model;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "users231")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @Column(name = "id")
@@ -20,6 +24,18 @@ public class User {
     @Column(name = "email")
     private String Email;
 
+    @Column(name = "login")
+    private String login;
+
+    @Column(name = "password")
+    private String password;
+
+    @Transient
+    private String passwordConfirm;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles;
+
     public User() {}
 
     public User(String Name, String Adress, String Email) {
@@ -33,6 +49,82 @@ public class User {
         this.Name = Name;
         this.Adress = Adress;
         this.Email = Email;
+    }
+
+    public User(long id, String name, String adress, String email, String login, String password) {
+        this.id = id;
+        this.Name = name;
+        this.Adress = adress;
+        this.Email = email;
+        this.login = login;
+        this.password = password;
+    }
+
+    public User(String name, String adress, String email, String login, String password) {
+        this.Name = name;
+        this.Adress = adress;
+        this.Email = email;
+        this.login = login;
+        this.password = password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public void setUsername(String login) {
+        this.login = login;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return login;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Long getId() {
@@ -55,8 +147,8 @@ public class User {
         return Adress;
     }
 
-    public void setAdress(String Adress) {
-        this.Adress = Adress;
+    public void setAdress(String adress) {
+        this.Adress = adress;
     }
 
     public String getEmail() {
@@ -64,7 +156,7 @@ public class User {
     }
 
     public void setEmail(String email) {
-        this.Email = Email;
+        this.Email = email;
     }
 
 }

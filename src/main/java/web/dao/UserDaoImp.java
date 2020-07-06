@@ -27,19 +27,44 @@ public class UserDaoImp implements UserDao {
    @Override
    @Transactional
    public void deleteUser(long id) throws SQLException {
-      String sql = "delete from users231 where id=" + id;
-      entityManager.createNativeQuery(sql).executeUpdate();
+      String sql = "delete from User where id=" + id;
+      entityManager.createQuery(sql).executeUpdate();
    }
 
    @Override
    @Transactional
    public void updateUser(User user, long oldId){
-      entityManager.createQuery("UPDATE User SET id =:id, name =:name, adress =:adress, email =:email where id = :oldId")
-              .setParameter("id", user.getId())
+      entityManager.createQuery("UPDATE User SET name =:name, adress =:adress, email =:email, login =:login, password=:password where id = :oldId")
               .setParameter("name", user.getName())
               .setParameter("adress", user.getAdress())
               .setParameter("email", user.getEmail())
+              .setParameter("login", user.getUsername())
+              .setParameter("password", user.getPassword())
               .setParameter("oldId", oldId)
               .executeUpdate();
+   }
+
+   @Override
+   public User findByUsername(String username) {
+      String query = "from User where login='" + username +"'";
+      User user;
+      try {
+         user = (User) entityManager.createQuery(query).getSingleResult();
+      } catch (Exception e) {
+         return null;
+      }
+      return user;
+   }
+
+   @Override
+   public User getById(long id){
+      String query = "from User where id=" + id;
+      User user;
+      try {
+         user = (User) entityManager.createQuery(query).getSingleResult();
+      } catch (Exception e) {
+         return null;
+      }
+      return user;
    }
 }
