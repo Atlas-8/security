@@ -16,6 +16,25 @@
     <div class="card">
         <div class="card-body">
             <div class="col-md-8">
+                <div class="row" style="margin-left: inherit">
+                    <div>
+                        <form class="button" th:action="@{/admin/madeAdmin/{id}(id=${user.id})}" method="GET">
+                            <input type="submit" class="bullet-button" value="Add admin status"/>
+                        </form>
+                    </div>
+                    <div style="padding-left: 2%"></div>
+                    <div>
+                        <form class="button" th:action="@{/admin/dismissAdmin/{id}(id=${user.id})}" method="GET">
+                            <input type="submit" class="bullet-button" value="Remove admin status"/>
+                        </form>
+                    </div>
+                    <div style="padding-left: 2%"></div>
+                    <div>
+                        <form class="button" th:action="@{/logout}" method="GET">
+                            <input type="submit" class="bullet-button" value="Logout"/>
+                        </form>
+                    </div>
+                </div>
                 <form action="#" th:action="@{/admin/updateUser/{id}(id=${user.id})}" th:object="${user}" method="post">
                     <div class="row">
                         <div class="form-group col-md-8">
@@ -38,14 +57,12 @@
                             <label for="adress" class="col-form-label">Adress</label>
                             <input type="text" th:field="*{adress}" class="form-control" id="adress" placeholder="adress" th:value="*{getAdress()}">
                         </div>
-
                         <div class="form-group col-md-8">
                             <input type="submit" class="btn btn-primary" value="Update user">
                         </div>
+
                         <br>
-                        <form class="button" th:action="@{../logout}" method="GET">
-                            <input type="submit" class="btn btn-primary" value="Logout"/>
-                        </form>
+
                     </div>
                 </form>
             </div>

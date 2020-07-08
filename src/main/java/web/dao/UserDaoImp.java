@@ -2,6 +2,7 @@ package web.dao;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import web.model.Role;
 import web.model.User;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,6 +23,26 @@ public class UserDaoImp implements UserDao {
    @Override
    public List<User> listUsers() {
       return entityManager.createQuery("from User").getResultList();
+   }
+
+   @Override
+   @Transactional
+   public void madeAdmin(User user){
+      Role admin = new Role(1L, "ROLE_ADMIN");
+      user.getRoles().add(admin);
+      admin.getUsers().add(user);
+      entityManager.merge(user);
+      entityManager.flush();
+   }
+
+   @Override
+   @Transactional
+   public void dismissAdmin(User user){
+      Role admin = new Role(1L, "ROLE_ADMIN");
+      user.getRoles().remove(admin);
+      admin.getUsers().remove(user);
+      entityManager.merge(user);
+      entityManager.flush();
    }
 
    @Override
@@ -67,4 +88,5 @@ public class UserDaoImp implements UserDao {
       }
       return user;
    }
+
 }

@@ -17,6 +17,9 @@
     <div class="card">
         <div class="card-body">
             <div class="col-md-10">
+                <form class="button" th:action="@{/logout}" method="GET">
+                    <input type="submit" class="bullet-button" value="Logout"/>
+                </form>
                 <form action="#" th:action="@{/admin/saveUser}" th:object="${user}" method="post">
                     <div class="row">
                         <div class="form-group col-md-8">
@@ -43,12 +46,6 @@
                         <div class="form-group col-md-8">
                             <input type="submit" class="btn btn-primary" value="Save user">
                         </div>
-
-                        <br>
-                        <form class="button" th:action="@{../logout}" method="GET">
-                            <input type="submit" class="btn btn-primary" value="Logout"/>
-                        </form>
-
                     </div>
                 </form>
             </div>

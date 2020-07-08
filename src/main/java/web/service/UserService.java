@@ -16,4 +16,6 @@ public interface UserService extends UserDetailsService {
     void updateUser(User user, long oldId);
     UserDetails loadUserByUsername(String var1) throws UsernameNotFoundException;
     User getById(long id);
+    void madeAdmin(User user);
+    void dismissAdmin(User user);
 }

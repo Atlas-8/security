@@ -1,19 +1,25 @@
 package web.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import web.model.Role;
 import web.model.User;
 import web.service.UserService;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
@@ -26,11 +32,41 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/")
+    @GetMapping
     public String printUsers(ModelMap model) {
         List<User> users = userService.listUsers();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Object obj = auth.getPrincipal();
+        String username = "";
+        if (obj instanceof UserDetails) {
+            username = ((UserDetails) obj).getUsername();
+        } else {
+            username = obj.toString();
+        }
+        User admin = (User) userService.loadUserByUsername(username);
         model.addAttribute("users", users);
+        model.addAttribute("admin", admin);
         return "users";
+    }
+
+    @GetMapping(value = "/madeAdmin/{id}")
+    public void makeAdmin(@PathVariable("id") long id, HttpServletResponse response) throws IOException {
+        User user = userService.getById(id);
+        Set<Role> roles = user.getRoles();
+        if (!roles.contains(new Role(1L, "ROLE_ADMIN"))){
+            userService.madeAdmin(user);
+        }
+        response.sendRedirect("/admin/");
+    }
+
+    @GetMapping(value = "/dismissAdmin/{id}")
+    public void dismissAdmin(@PathVariable("id") long id, HttpServletResponse response) throws IOException {
+        User user = userService.getById(id);
+        Set<Role> roles = user.getRoles();
+        if (roles.contains(new Role(1L, "ROLE_ADMIN"))){
+            userService.dismissAdmin(user);
+        }
+        response.sendRedirect("/admin/");
     }
 
     @GetMapping(value = "/saveUser")
@@ -57,7 +93,7 @@ public class AdminController {
     }
 
     @GetMapping(value = "/deleteUser/{id}")
-    public void deleteUser(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") long id) throws IOException, SQLException {
+    public void deleteUser(HttpServletResponse response, @PathVariable("id") long id) throws IOException, SQLException {
         userService.deleteUser(id);
         response.setContentType("text/html;charset=utf-8");
         response.sendRedirect("/admin/");
