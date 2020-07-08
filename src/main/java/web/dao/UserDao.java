@@ -1,5 +1,6 @@
 package web.dao;
 
+import web.model.Role;
 import web.model.User;
 
 import java.sql.SQLException;
@@ -12,6 +13,6 @@ public interface UserDao{
    void updateUser(User user, long oldId);
    User findByUsername(String username);
    User getById(long id);
-   void madeAdmin(User user);
-   void dismissAdmin(User user);
+   void madeAdmin(User user, Role role);
+   void dismissAdmin(User user, Role role);
 }

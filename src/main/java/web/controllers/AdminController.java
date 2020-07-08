@@ -50,7 +50,7 @@ public class AdminController {
     }
 
     @GetMapping(value = "/madeAdmin/{id}")
-    public void makeAdmin(@PathVariable("id") long id, HttpServletResponse response) throws IOException {
+    public void madeAdmin(@PathVariable("id") long id, HttpServletResponse response) throws IOException {
         User user = userService.getById(id);
         Set<Role> roles = user.getRoles();
         if (!roles.contains(new Role(1L, "ROLE_ADMIN"))){

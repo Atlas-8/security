@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import web.dao.UserDao;
 import web.model.Role;
 import web.model.User;
+
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
@@ -17,12 +18,13 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
-
+    private final RoleService roleService;
     private final PasswordEncoder encoder;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, PasswordEncoder encoder) {
+    public UserServiceImpl(UserDao userDao, PasswordEncoder encoder, RoleService roleService) {
         this.userDao = userDao;
+        this.roleService = roleService;
         this.encoder = encoder;
     }
 
@@ -33,18 +35,20 @@ public class UserServiceImpl implements UserService {
         if (userFromDB != null) {
             throw new RuntimeException("login is already exist");
         }
-        user.setRoles(Collections.singleton(new Role(2L, "ROLE_USER")));
+        user.setRoles(Collections.singleton(roleService.getRole("ROLE_USER")));
         user.setPassword(encoder.encode(user.getPassword()));
         userDao.add(user);
     }
 
     @Override
     public void madeAdmin(User user){
-        userDao.madeAdmin(user);
+        Role role = roleService.getRole("ROLE_ADMIN");
+        userDao.madeAdmin(user, role);
     }
 
     public void dismissAdmin(User user){
-        userDao.dismissAdmin(user);
+        Role role = roleService.getRole("ROLE_ADMIN");
+        userDao.dismissAdmin(user, role);
     }
 
     @Transactional(readOnly = true)

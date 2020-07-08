@@ -27,20 +27,18 @@ public class UserDaoImp implements UserDao {
 
    @Override
    @Transactional
-   public void madeAdmin(User user){
-      Role admin = new Role(1L, "ROLE_ADMIN");
-      user.getRoles().add(admin);
-      admin.getUsers().add(user);
+   public void madeAdmin(User user, Role role){
+      user.getRoles().add(role);
+      role.getUsers().add(user);
       entityManager.merge(user);
       entityManager.flush();
    }
 
    @Override
    @Transactional
-   public void dismissAdmin(User user){
-      Role admin = new Role(1L, "ROLE_ADMIN");
-      user.getRoles().remove(admin);
-      admin.getUsers().remove(user);
+   public void dismissAdmin(User user, Role role){
+      user.getRoles().remove(role);
+      role.getUsers().remove(user);
       entityManager.merge(user);
       entityManager.flush();
    }
